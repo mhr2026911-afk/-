@@ -1,0 +1,28 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/api/health",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d --build",
+  "secrets": [
+    {
+      "name": "SECRET_KEY",
+      "description": "مفتاح توقيع جلسات مرسال وأكواد التحقق (تم توليده للتطوير)",
+      "requiredAtBoot": true,
+      "generatedForDevelopment": true
+    },
+    {
+      "name": "TWILIO_ACCOUNT_SID",
+      "description": "معرّف حساب Twilio لإرسال رموز التحقق عبر رسائل SMS (اختياري — بدونه يظهر الرمز على الشاشة في وضع المعاينة فقط)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "TWILIO_AUTH_TOKEN",
+      "description": "رمز مصادقة Twilio لإرسال رسائل التحقق (اختياري)",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "TWILIO_FROM_NUMBER",
+      "description": "رقم المرسل المُعتمد في Twilio لرسائل التحقق (اختياري)",
+      "requiredAtBoot": false
+    }
+  ]
+}

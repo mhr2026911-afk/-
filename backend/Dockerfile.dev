@@ -1,0 +1,17 @@
+# Dev image for the Mer sal API: only dependencies are baked in.
+# The application source is bind-mounted at runtime so edits are picked up
+# by uvicorn's reloader.
+FROM python:3.12-slim
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /srv
+
+# requirements-dev.txt pins the runtime dependencies and adds pytest, so the
+# same image runs the app and the test suite.
+COPY requirements.txt requirements-dev.txt /tmp/
+RUN pip install --no-cache-dir -r /tmp/requirements-dev.txt
+
+EXPOSE 8000
