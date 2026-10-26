@@ -82,10 +82,6 @@ export function formatBytes(bytes = 0) {
   return `${value.toFixed(index === 0 ? 0 : 1)} ${units[index]}`
 }
 
-export function formatPhone(phone = '') {
-  return phone
-}
-
 export function initials(name, phone) {
   const source = (name || '').trim()
   if (!source) return (phone || '؟').slice(-2)

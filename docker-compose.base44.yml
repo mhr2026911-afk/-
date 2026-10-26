@@ -98,6 +98,31 @@ services:
       retries: 12
       start_period: 40s
 
+  # One-shot test runner. Gated behind the "test" profile so a normal
+  # `up -d` never starts it.
+  tests:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    profiles: ["test"]
+    working_dir: /srv
+    labels:
+      base44.project: "مرسال — الاختبارات"
+      base44.kind: "worker"
+    env_file:
+      - ./.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      - DATABASE_URL=postgresql+psycopg://mersal:mersal_dev_password@db:5432/mersal
+      - MEDIA_DIR=/tmp/mersal-media-test
+      - BASE44_PREVIEW_MODE
+    volumes:
+      - ./backend:/srv
+    command: ["sh", "-ec", "exec python -m pytest -q tests"]
+    depends_on:
+      db:
+        condition: service_healthy
+
 volumes:
   db-data:
   media-data:

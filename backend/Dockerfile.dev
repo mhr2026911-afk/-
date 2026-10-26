@@ -9,7 +9,9 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /srv
 
-COPY requirements.txt /tmp/requirements.txt
-RUN pip install --no-cache-dir -r /tmp/requirements.txt
+# requirements-dev.txt pins the runtime dependencies and adds pytest, so the
+# same image runs the app and the test suite.
+COPY requirements.txt requirements-dev.txt /tmp/
+RUN pip install --no-cache-dir -r /tmp/requirements-dev.txt
 
 EXPOSE 8000

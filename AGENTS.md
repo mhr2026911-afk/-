@@ -34,10 +34,12 @@ docker compose -f docker-compose.base44.yml ps
 docker compose -f docker-compose.base44.yml logs --tail 60 api web
 ```
 
-- لا توجد مجموعة اختبارات في المستودع. للتحقق من الـ API شغّل سكربتًا مؤقتًا (في `/tmp`، لا في المستودع)
-  يستخدم `fastapi.testclient` داخل حاوية `api` مع قاعدة بيانات منفصلة: أنشئ `mersal_test` عبر psql، ثم
-  `exec -e DATABASE_URL=…mersal_test -e MEDIA_DIR=/tmp/media-test -e PYTHONPATH=/srv api python /tmp/test.py`،
-  واحذف قاعدة الاختبار بعدها. لا تختبر في قاعدة التطبيق حتى لا تبقى حسابات تجريبية.
+- **اختبارات الخادم** (`backend/tests/`) تعمل عبر خدمة `tests` المقيّدة بالملف `test`:
+  `docker compose -f docker-compose.base44.yml --profile test run --rm tests`.
+  الاختبارات تعيد كتابة `DATABASE_URL` إلى قاعدة `<db>_test` تُنشأ تلقائيًا وتُفرَّغ بعد كل اختبار،
+  فلا تلمس قاعدة التطبيق أبدًا ولا تترك حسابات تجريبية. لا تشغّل الاختبارات على قاعدة `mersal` مباشرة.
+- **اختبارات الواجهة** تعتمد Node test runner المدمج (لا اعتماديات إضافية):
+  `docker compose -f docker-compose.base44.yml exec -T web npm test`.
 - بناء الواجهة للتحقق من الأخطاء: `docker compose -f docker-compose.base44.yml exec -T web npx vite build`.
 
 ## متغيرات البيئة

@@ -74,7 +74,3 @@ export function onSocket(handler) {
   listeners.add(handler)
   return () => listeners.delete(handler)
 }
-
-export function isSocketOpen() {
-  return Boolean(socket && socket.readyState === WebSocket.OPEN)
-}
